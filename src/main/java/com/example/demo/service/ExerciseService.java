@@ -4,6 +4,10 @@ import com.example.demo.Entities.ExerciseEntity;
 import com.example.demo.Models.Exercise;
 import org.springframework.stereotype.Service;
 import com.example.demo.repository.ExerciseRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ExerciseService {
     ExerciseRepository exerciseRepository;
@@ -16,6 +20,13 @@ public class ExerciseService {
         exerciseEntity.setTitle(exercise.getTitle());
         exerciseEntity.setWeight(exercise.getWeight());
         exerciseRepository.save(exerciseEntity);
+    }
+    public List<Exercise> getALlProducts() {
+
+        return exerciseRepository.findAll()
+                .stream()
+                .map(Exercise::new)
+                .collect(Collectors.toList());
     }
 
 }

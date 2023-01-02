@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.service.ExerciseService;
 
+import java.util.List;
+
 @RestController
 public class ExerciseController {
 
@@ -21,6 +23,11 @@ public class ExerciseController {
         exercise.setWeight(100);
         exerciseService.saveData(exercise);
         return exercise;
+    }
+
+    @GetMapping("/testukas")
+    public List<Exercise> getAllExercises(){
+return exerciseService.getALlProducts();
     }
 
 }
