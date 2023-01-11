@@ -2,10 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Models.Exercise;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.ExerciseService;
 
 import java.util.List;
@@ -29,9 +26,12 @@ public class ExerciseController {
         return exercise;
     }
 
-    @GetMapping("/testukas")
+    @GetMapping("/exercises")
     public List<Exercise> getAllExercises(){
 return exerciseService.getALlProducts();
     }
-
+    @DeleteMapping("/exercise/{id}")
+    public void deleteExercise(@PathVariable Long id){
+        exerciseService.deleteExercise(id);
+    }
 }

@@ -21,6 +21,9 @@ public class ExerciseService {
         exerciseEntity.setWeight(exercise.getWeight());
         exerciseRepository.save(exerciseEntity);
     }
+    public void deleteExercise(Long id){
+        exerciseRepository.delete(exerciseRepository.getReferenceById(id));
+    }
     public List<Exercise> getALlProducts() {
 
         return exerciseRepository.findAll()
