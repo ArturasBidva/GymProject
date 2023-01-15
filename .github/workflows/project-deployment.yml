@@ -38,6 +38,6 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: github-actions-artifact
+        name: demo-0.0.4-SNAPSHOT.jar
     - name: Test artifact download
       run: ls -R
