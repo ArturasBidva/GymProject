@@ -30,6 +30,10 @@ jobs:
             mvn -DskipTests -B package --file pom.xml
             mkdir artifacts && cp target/*.jar artifacts
             cd artifacts && ls
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: assets-for-download
   build-new:
     name: Build new
     runs-on: ubuntu-latest
@@ -39,5 +43,5 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: demo-0.0.4-SNAPSHOT.jar
-    - name: Test artifact download
+    - name: assets-for-download
       run: ls -R
