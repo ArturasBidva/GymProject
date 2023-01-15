@@ -30,12 +30,14 @@ jobs:
             mvn -DskipTests -B package --file pom.xml
             mkdir artifacts && cp target/*.jar artifacts
             cd artifacts && ls
-
-    - uses: actions/checkout@v3
-
-    - uses: actions/download-artifact@v3
+  build-new:
+    name: Build new
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
       with:
         name: github-actions-artifact
-    
-    - name: Display structure of downloaded files
+    - name: Test artifact download
       run: ls -R
