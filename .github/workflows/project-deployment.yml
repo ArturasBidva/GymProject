@@ -35,7 +35,7 @@ jobs:
 
     - uses: actions/download-artifact@v3
       with:
-        name: my-artifact
+        name: github-actions-artifact
     
     - name: Display structure of downloaded files
       run: ls -R
