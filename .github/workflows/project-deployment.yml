@@ -39,7 +39,7 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        name: download-artifact
+        name: github-actions-artifact
     - name: Test artifact download
       run: ls -R
     
