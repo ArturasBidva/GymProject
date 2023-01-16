@@ -44,5 +44,6 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: demo-0.0.4-SNAPSHOT.jar
+        path: artifacts
     - name: assets-for-download
       run: ls -R
