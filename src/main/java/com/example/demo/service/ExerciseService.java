@@ -42,6 +42,7 @@ public class ExerciseService {
     }
     public Exercise getExerciseById(Long id){
         ExerciseEntity exerciseEntity = exerciseRepository.getReferenceById(id);
+        System.out.println("gg");
         return new Exercise(exerciseEntity);
     }
 
