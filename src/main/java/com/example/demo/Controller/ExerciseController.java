@@ -45,4 +45,8 @@ public class ExerciseController {
         exercise1.setWeight(weight);
         exerciseService.updateExercise(id,exercise1);
     }
+    @GetMapping("/exercise/get/{id}")
+    public Exercise getExerciseById(@PathVariable Long id){
+      return exerciseService.getExerciseById(id);
+    }
 }

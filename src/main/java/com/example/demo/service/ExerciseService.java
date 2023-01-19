@@ -40,5 +40,9 @@ public class ExerciseService {
         referenceById.setWeight(exercise.getWeight());
         exerciseRepository.save(referenceById);
     }
+    public Exercise getExerciseById(Long id){
+        ExerciseEntity exerciseEntity = exerciseRepository.getReferenceById(id);
+        return new Exercise(exerciseEntity);
+    }
 
 }
