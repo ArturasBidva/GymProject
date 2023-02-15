@@ -20,6 +20,8 @@ public class ExerciseService {
         ExerciseEntity exerciseEntity = new ExerciseEntity();
         exerciseEntity.setTitle(exercise.getTitle());
         exerciseEntity.setWeight(exercise.getWeight());
+        exerciseEntity.setImgUrl(exercise.getImgUrl());
+        exerciseEntity.setDescription(exercise.getDescription());
         exerciseRepository.save(exerciseEntity);
     }
 
@@ -38,6 +40,8 @@ public class ExerciseService {
         ExerciseEntity referenceById = exerciseRepository.getReferenceById(id);
         referenceById.setTitle(exercise.getTitle());
         referenceById.setWeight(exercise.getWeight());
+        referenceById.setImgUrl(exercise.getImgUrl());
+        referenceById.setDescription(exercise.getDescription());
         exerciseRepository.save(referenceById);
     }
     public Exercise getExerciseById(Long id){

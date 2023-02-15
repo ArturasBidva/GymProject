@@ -8,6 +8,8 @@ public class Exercise {
     private Long id;
     private String title;
     private int weight;
+    private String imgUrl;
+    private String description;
 
     public String getTitle() {
         return title;
@@ -29,6 +31,8 @@ public class Exercise {
         this.id = exerciseEntity.getId();
         this.title = exerciseEntity.getTitle();
         this.weight = exerciseEntity.getWeight();
+        this.imgUrl = exerciseEntity.getImgUrl();
+        this.description = exerciseEntity.getDescription();
 
     }
 
