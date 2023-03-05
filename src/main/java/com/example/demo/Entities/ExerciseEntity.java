@@ -5,12 +5,11 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "exercise", schema="public")
+@Table(name = "exercise")
 public class ExerciseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_generator")
-  @SequenceGenerator(name = "exercise_generator", sequenceName = "exercise_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String title;
   private int weight;
