@@ -1,0 +1,60 @@
+name: Deploy to Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  JAR_FILE_NAME: my-app.jar
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  SERVER_KEY: ${{ secrets.SERVER_KEY }}
+  SERVER_PORT: ${{ secrets.SERVER_PORT }}
+  SERVER_USER: ${{ secrets.SERVER_USER }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.JAR_FILE_NAME }}
+          path: target/${{ env.JAR_FILE_NAME }}
+
+      - name: Deploy with SSH
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          ssh-private-key: ${{ secrets.SERVER_KEY }}
+          ssh-known-hosts: |
+            ${{ secrets.SERVER_HOST }} ecdsa-sha2-nistp256 AAAAE2V...
+          args: |
+            --exclude=.git*
+            --exclude=.github*
+          local-path: target/${{ env.JAR_FILE_NAME }}
+          server-ip: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          port: ${{ secrets.SERVER_PORT }}
+
+      - name: SSH into server and run Docker Compose
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          ssh-private-key: ${{ secrets.SERVER_KEY }}
+          ssh-known-hosts: |
+            ${{ secrets.SERVER_HOST }} ecdsa-sha2-nistp256 AAAAE2V...
+          commands: |
+            cd docker-compose-directory
+            docker-compose up -d
