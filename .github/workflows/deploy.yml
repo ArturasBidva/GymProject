@@ -5,10 +5,11 @@ on:
     branches: [ main ]
 
 env:
-  JAR_FILE_NAME: "my-app.jar"
+  JAR_FILE_NAME: "gym-app.jar"
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
   SERVER_PORT: ${{ secrets.SERVER_PORT }}
   SERVER_USER: ${{ secrets.SERVER_USER }}
+  JAVA_HOME: /usr/lib/jvm/java-1.11.0-openjdk-amd64
 
 jobs:
   deploy:
@@ -16,8 +17,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Build JAR File
-        run: mvn package
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          java-home: ${{ env.JAVA_HOME }}
+      - name: Build and Package with Maven
+        run: mvn -B package --file pom.xml
       - name: Add Host to known_hosts
         uses: shimataro/ssh-key-action@v2
         with:
@@ -34,5 +40,7 @@ jobs:
           port: ${{ env.SERVER_PORT }}
           source: "target/${{ env.JAR_FILE_NAME }}"
           target: "/root/gymproject"
+      - name: Kill Running Docker Containers
+        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
       - name: Run Docker Compose
-        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/gymproject && docker-compose down && docker-compose up -d'
+        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/gymproject && docker-compose up -d'
