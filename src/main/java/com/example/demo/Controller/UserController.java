@@ -28,7 +28,7 @@ public class UserController {
         user.setImgUrl(imgUrl);
         user.setUsername(username);
         userService.updateUser(user.getId(), user);
-        System.out.println("ggg");
+        System.out.println("gggg");
         return user;
     }
 }
