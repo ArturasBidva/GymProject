@@ -36,7 +36,8 @@ public class ExerciseService {
                 .map(Exercise::new)
                 .collect(Collectors.toList());
     }
-    public void updateExercise(Long id, Exercise exercise){
+
+    public void updateExercise(Long id, Exercise exercise) {
         ExerciseEntity referenceById = exerciseRepository.getReferenceById(id);
         referenceById.setTitle(exercise.getTitle());
         referenceById.setWeight(exercise.getWeight());
@@ -44,7 +45,8 @@ public class ExerciseService {
         referenceById.setDescription(exercise.getDescription());
         exerciseRepository.save(referenceById);
     }
-    public Exercise getExerciseById(Long id){
+
+    public Exercise getExerciseById(Long id) {
         ExerciseEntity exerciseEntity = exerciseRepository.getReferenceById(id);
         System.out.println("ggggg");
         return new Exercise(exerciseEntity);

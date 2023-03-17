@@ -36,7 +36,7 @@ public class Exercise {
 
     }
 
-    public Exercise (){
+    public Exercise() {
 
     }
 

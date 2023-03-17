@@ -9,8 +9,7 @@ import lombok.Data;
 public class ExerciseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_generator")
-  @SequenceGenerator(name = "exercise_generator", sequenceName = "exercise_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String title;
   private int weight;
