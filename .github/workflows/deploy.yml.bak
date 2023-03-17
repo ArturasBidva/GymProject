@@ -28,7 +28,7 @@ jobs:
           java-home: ${{ env.JAVA_HOME }}
           
       - name: Build Jar File
-        run: mvn -B package --file GymProject/pom.xml
+        run: mvn -B package --file /root/GymProject/pom.xml
         
       - name: Make pom.xml readable
         run: cd GymProject && sudo chmod +r pom.xml
