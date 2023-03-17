@@ -1,0 +1,57 @@
+name: Delete Failed Workflows
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'
+
+jobs:
+  delete-failed-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete failed workflows
+        uses: actions/stale@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'This workflow has failed and is being automatically closed. Please open a new issue if this problem persists.'
+          days-before-stale: 0
+          days-before-close: 0
+          stale-when: 'failure'
+          debug: true
+This workflow uses the actions/stale action to automatically close failed workflows. It runs every minute using a cron schedule, and uses the secrets.GITHUB_TOKEN to authenticate with the GitHub API. You can customize the stale issue message and other settings as needed.
+
+
+
+
+vik.stoc@outlook.com
+can you make that workfload with manual trigger
+Sure, here's an example workflow with a manual trigger to delete all failed workflows:
+
+yaml
+Copy code
+name: Delete Failed Workflows
+on:
+  workflow_dispatch:
+  
+jobs:
+  delete-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Failed Workflows
+        id: failed-workflows
+        run: |
+          echo "::set-output name=failed_workflows::$(gh run list -f '{{.ID}}' -s completed -s failure)"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete Failed Workflows
+        if: steps.failed-workflows.outputs.failed_workflows != ''
+        run: |
+          for id in ${failed-workflows};
+          do
+            echo "Deleting workflow ${id}..."
+            gh workflow run ${id} delete -y
+          done
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
