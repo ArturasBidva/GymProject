@@ -14,7 +14,7 @@
     <name>demo</name>
     <description>Gym application that&apos;s helps to follow and share your progress</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.28</version>
+            <version>8.0.32</version>
         </dependency>
 
     </dependencies>
