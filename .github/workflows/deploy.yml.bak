@@ -5,11 +5,11 @@ on:
     branches: [ main ]
 
 env:
-  JAR_FILE_NAME: "my-app.jar"
+  JAR_FILE_NAME: "demo-0.0.1-SNAPSHOT.jar"
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
   SERVER_PORT: ${{ secrets.SERVER_PORT }}
   SERVER_USER: ${{ secrets.SERVER_USER }}
-  JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/17.0.6-10/x64
+  JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/17.0.2-1/x64
 
 jobs:
   deploy:
@@ -25,10 +25,10 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
           java-home: ${{ env.JAVA_HOME }}
-      - name: Grant Permissions to pom.xml
-        run: sudo chmod +r /root/GymProject/pom.xml
+      - name: Change Permission of pom.xml file
+        run: sudo chmod +r GymProject/pom.xml
       - name: Build Jar File
-        run: mvn -B package --file /root/GymProject/pom.xml
+        run: sudo mvn -B package --file GymProject/pom.xml
       - name: Add Host to known_hosts
         uses: shimataro/ssh-key-action@v2
         with:
@@ -44,7 +44,7 @@ jobs:
           key: ${{ secrets.SECRET_KEY }}
           port: ${{ env.SERVER_PORT }}
           source: "GymProject/target/${{ env.JAR_FILE_NAME }}"
-          target: "/root/GymProject"
+          target: "/root/gymproject"
       - name: Kill Running Docker Containers
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
       - name: Run Docker Compose
