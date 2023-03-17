@@ -23,7 +23,7 @@ public class ExerciseService {
         exerciseEntity.setImgUrl(exercise.getImgUrl());
         exerciseEntity.setDescription(exercise.getDescription());
         exerciseRepository.save(exerciseEntity);
-        System.out.println("Gg");
+        System.out.println("Ggg");
     }
 
     public void deleteExercise(Long id) {
