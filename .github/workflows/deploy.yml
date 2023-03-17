@@ -16,12 +16,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Set up Java 11
+      - name: Set up Java 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
-          java-home: /usr/lib/jvm/java-1.11.0-openjdk-amd64
+          java-version: '17'
+          java-home: /usr/lib/jvm/adoptopenjdk-17-hotspot-amd64
       - name: Build Jar File
         run: mvn -B package --file pom.xml
       - name: Add Host to known_hosts
@@ -40,7 +40,10 @@ jobs:
           port: ${{ env.SERVER_PORT }}
           source: "target/${{ env.JAR_FILE_NAME }}"
           target: "/root/gymproject"
-      - name: Kill Running Docker Containers
-        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
+      - name: Kill Running Docker Container
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} '
+            docker stop $(docker ps -q --filter name=my-app) || true
+          '
       - name: Run Docker Compose
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/gymproject && docker-compose up -d'
