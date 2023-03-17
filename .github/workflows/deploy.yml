@@ -1,24 +1,38 @@
-name: Deploy to Server
+name: Deploy to VPS
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+
+env:
+  JAR_FILE_NAME: "my-app.jar"
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  SERVER_PORT: ${{ secrets.SERVER_PORT }}
+  SERVER_USER: ${{ secrets.SERVER_USER }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
-
-      - name: Set up SSH key
+      - name: Add Host to known_hosts
         uses: shimataro/ssh-key-action@v2
         with:
+          key: ${{ secrets.SERVER_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          if_key_exists: fail
+      - name: Copy jar file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_USER }}
           key: ${{ secrets.SECRET_KEY }}
-
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y sshpass
-
-      - name: Deploy code
-        run: |
-          sshpass -p "${{ secrets.SERVER_KEY }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.SERVER_PORT }} target/${{ secrets.JAR_FILE_NAME }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/gymproject
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'cd /root/gymproject && java -jar ${{ secrets.JAR_FILE_NAME }}'
+          port: ${{ env.SERVER_PORT }}
+          source: "target/${{ env.JAR_FILE_NAME }}"
+          target: "/root/gymproject"
+      - name: Kill Running Docker Containers
+        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
+      - name: Run Docker Compose
+        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/gymproject && docker-compose up -d'
