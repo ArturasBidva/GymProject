@@ -28,7 +28,7 @@ public class UserService {
 
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.getReferenceById(id);
-        System.out.println("gg");
+        System.out.println("gge");
         return new User(userEntity);
     }
 }

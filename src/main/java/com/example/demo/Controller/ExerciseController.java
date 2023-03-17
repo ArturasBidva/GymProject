@@ -47,6 +47,6 @@ public class ExerciseController {
     }
     @GetMapping("/exercise/get/{id}")
     public Exercise getExerciseById(@PathVariable Long id){
-      return exerciseService.getExerciseById(id);
+        return exerciseService.getExerciseById(id);
     }
 }
