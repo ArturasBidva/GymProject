@@ -25,11 +25,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-          java-home: ${{ env.JAVA_HOME }}
-      
-      - name: Make pom.xml readable
-        run: sudo -s -- cd GymProject && chmod +r pom.xml
-              
+          java-home: ${{ env.JAVA_HOME }}     
           
       - name: Build Jar File
         run: mvn -B package --file /root/GymProject/pom.xml
