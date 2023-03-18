@@ -28,7 +28,7 @@ jobs:
           java-home: ${{ env.JAVA_HOME }}
       
       - name: Make pom.xml readable
-        run: sudo -s -- 'cd /root/GymProject && chmod +r pom.xml
+        run: sudo -s -- 'cd /root/GymProject && chmod +r pom.xml'
               
           
       - name: Build Jar File
