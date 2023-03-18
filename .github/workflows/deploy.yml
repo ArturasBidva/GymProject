@@ -43,10 +43,10 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ env.SERVER_PORT }}
       - name: Create File
-      - uses: finnp/create-file-action@1.0.0
-           env:
-             FILE_NAME: "dir/fileName.txt"
-             FILE_BASE64: "ZWFzdGVyZWdnLWxvbAo="
+      - uses: "finnp/create-file-action@master"
+      env:
+        FILE_NAME: "dir/fileName.txt"
+        FILE_DATA: "file content"
           source: "GymProject/target/my-app.jar"
           target: "/root/GymProject/"
           
