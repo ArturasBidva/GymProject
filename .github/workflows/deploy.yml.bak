@@ -29,7 +29,7 @@ jobs:
           
       - name: Build Jar File
         run: |
-          sudo chmod +r /root/GymProject/pom.xml
+          sudo chmod +r --file /root/GymProject/pom.xml
           mvn -B package --file /root/GymProject/pom.xml
         
       - name: Copy jar file to server
