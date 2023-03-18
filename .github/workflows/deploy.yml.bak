@@ -27,10 +27,10 @@ jobs:
           java-version: '17'
           java-home: ${{ env.JAVA_HOME }}     
           
-     - name: Build Jar File
-       run: |
-    sudo chmod +r /root/GymProject/pom.xml
-    mvn -B package --file /root/GymProject/pom.xml
+      - name: Build Jar File
+        run: |
+          sudo chmod +r /root/GymProject/pom.xml
+          mvn -B package --file /root/GymProject/pom.xml
         
       - name: Copy jar file to server
         uses: appleboy/scp-action@master
