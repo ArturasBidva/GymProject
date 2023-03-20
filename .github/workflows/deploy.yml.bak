@@ -1,38 +1,25 @@
-name: Deploy
+name: Run Jar on Docker
 
 on:
   push:
     branches:
       - main
 
-env:
-  SERVER_HOST: ${{ secrets.SERVER_HOST }}
-  SERVER_PORT: ${{ secrets.SERVER_PORT }}
-  SERVER_USER: ${{ secrets.SERVER_USER }}
-  SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openssh-client
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
-      - name: Start SSH agent and add key
-        run: |
-          eval "$(ssh-agent -s)"
-          echo "${{ secrets.SERVER_SSH_KEY }}" > private_key
-          chmod 600 private_key
-          printf "%s\n" "${{ secrets.SSH_PASSPHRASE }}" | ssh-add private_key
-          rm -f private_key
-
-      - name: Deploy to server
-        run: |
-          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST -p $SERVER_PORT 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
-          git push deploy
-          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST -p $SERVER_PORT 'cd gymproject && docker-compose up -d'
+    - name: Deploy to VPS
+      run: |
+        scp Dockerfile GymProject.jar root@your-vps-ip:/root/GymProject
+        ssh root@your-vps-ip 'docker build -t gymproject /root/GymProject'
+        ssh root@your-vps-ip 'docker run --name gymproject-container -d gymproject'
