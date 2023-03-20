@@ -42,13 +42,14 @@ jobs:
           username: ${{ env.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
           port: ${{ env.SERVER_PORT }}
-      - name: Create File
-      - uses: "finnp/create-file-action@master"
-      env:
-        FILE_NAME: "dir/fileName.txt"
-        FILE_DATA: "file content"
           source: "GymProject/target/my-app.jar"
           target: "/root/GymProject/"
+          
+      - name: Create File
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: "dir/fileName.txt"
+          FILE_DATA: "file content"
           
       - name: Kill Running Docker Containers
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
