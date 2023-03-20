@@ -9,7 +9,6 @@ env:
   SERVER_PORT: ${{ secrets.SERVER_PORT }}
   SERVER_USER: ${{ secrets.SERVER_USER }}
   SERVER_KEY: ${{ secrets.SERVER_KEY }}
-  JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/17.0.6-10/x64
 
 jobs:
   deploy:
@@ -19,39 +18,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-          
-      - name: Set up Java 17
-        uses: actions/setup-java@v2
+
+      - name: Download JAR file
+        uses: actions/download-artifact@v2
         with:
-          distribution: 'adopt'
-          java-version: '17'
-          java-home: ${{ env.JAVA_HOME }}     
-          
+          name: GymProject
+          path: /root/GymProject/GymProject.jar
+
       - name: Set ownership of GymProject directory
         run: sudo chown -R root:root '/root/GymProject'
 
-      - name: Build Jar File
-        run: |
-          sudo chmod +r /root/GymProject/pom.xml
-          mvn -B package --file /root/GymProject/pom.xml
-        
-      - name: Copy jar file to server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ env.SERVER_HOST }}
-          username: ${{ env.SERVER_USER }}
-          key: ${{ secrets.SERVER_KEY }}
-          port: ${{ env.SERVER_PORT }}
-      - name: Create File
-      - uses: "finnp/create-file-action@master"
-      env:
-        FILE_NAME: "dir/fileName.txt"
-        FILE_DATA: "file content"
-          source: "GymProject/target/my-app.jar"
-          target: "/root/GymProject/"
-          
       - name: Kill Running Docker Containers
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
-        
+
       - name: Run Docker Compose
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/GymProject && docker-compose up -d'
