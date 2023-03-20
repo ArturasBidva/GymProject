@@ -18,8 +18,12 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
+    - name: Add VPS host key to known_hosts
+      run: |
+        ssh-keyscan -H 45.9.191.191 >> ~/.ssh/known_hosts
+
     - name: Deploy to VPS
       run: |
-        scp Dockerfile GymProject.jar root@${{ secrets.SERVER_HOST }}:/root/GymProject
-        ssh root@${{ secrets.SERVER_HOST }} 'docker build -t gymproject /root/GymProject'
-        ssh root@${{ secrets.SERVER_HOST }} 'docker run --name gymproject-container -d gymproject'
+        scp Dockerfile GymProject.jar root@45.9.191.191:/root/GymProject
+        ssh root@45.9.191.191 'docker build -t gymproject /root/GymProject'
+        ssh root@45.9.191.191 'docker run --name gymproject-container -d gymproject'

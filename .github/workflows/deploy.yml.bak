@@ -20,6 +20,6 @@ jobs:
 
     - name: Deploy to VPS
       run: |
-        scp Dockerfile GymProject.jar root@your-vps-ip:/root/GymProject
-        ssh root@your-vps-ip 'docker build -t gymproject /root/GymProject'
-        ssh root@your-vps-ip 'docker run --name gymproject-container -d gymproject'
+        scp Dockerfile GymProject.jar root@${{ secrets.SERVER_HOST }}:/root/GymProject
+        ssh root@${{ secrets.SERVER_HOST }} 'docker build -t gymproject /root/GymProject'
+        ssh root@${{ secrets.SERVER_HOST }} 'docker run --name gymproject-container -d gymproject'
