@@ -24,10 +24,10 @@ jobs:
 
       - name: Kill Running GymProject Docker Containers
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
+          ssh -o StrictHostKeyChecking=no ${{ env.SERVER_USER }}@${{ env.SERVER_HOST }} -p ${{ env.SERVER_PORT }} 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
 
       - name: Run Docker Compose
-        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/GymProject && docker-compose up -d'
+        run: ssh -o StrictHostKeyChecking=no ${{ env.SERVER_USER }}@${{ env.SERVER_HOST }} -p ${{ env.SERVER_PORT }} 'cd /root/GymProject && docker-compose up -d'
         env:
           DOCKER_COMPOSE_PROJECT_NAME: gymproject
         shell: bash
