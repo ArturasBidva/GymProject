@@ -1,24 +1,36 @@
-name: Deploy to Production
+name: Deploy
 
 on:
   push:
     branches:
       - main
 
+env:
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  SERVER_PORT: ${{ secrets.SERVER_PORT }}
+  SERVER_USER: ${{ secrets.SERVER_USER }}
+  SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set up SSH key
-      uses: webfactory/ssh-agent@v0.5.0
-      with:
-        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssh-client
 
-    - name: Connect to server and deploy
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SERVER_PORT }} 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} -p ${{ secrets.SERVER_PORT }} 'cd /var/www/gymproject && git pull && docker-compose up -d'
+      - name: Add SSH key to agent
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST -p $SERVER_PORT 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
+          git push deploy
+          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST -p $SERVER_PORT 'cd gymproject && docker-compose up -d'

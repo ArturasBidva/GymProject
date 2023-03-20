@@ -23,11 +23,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openssh-client
 
-      - name: Add SSH key to agent
-        uses: webfactory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
-          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+      - name: Start SSH agent and add key
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "${{ secrets.SERVER_SSH_KEY }}" > private_key
+          chmod 600 private_key
+          printf "%s\n" "${{ secrets.SSH_PASSPHRASE }}" | ssh-add private_key
+          rm -f private_key
 
       - name: Deploy to server
         run: |
