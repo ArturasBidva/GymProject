@@ -14,22 +14,20 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
-
       - name: Download JAR file
-        uses: actions/download-artifact@v2
-        with:
-          name: GymProject
-          path: /root/GymProject/GymProject.jar
+        run: |
+          curl -LJO https://github.com/ArturasBidva/GymProject/raw/main/GymProject.jar
+          sudo mv GymProject.jar /root/GymProject
 
       - name: Set ownership of GymProject directory
         run: sudo chown -R root:root '/root/GymProject'
 
-      - name: Kill Running Docker Containers
-        run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker kill $(docker ps -q)'
+      - name: Kill Running GymProject Docker Containers
+        run: |
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'docker ps -a --filter "label=gymproject" -q | xargs -r docker kill'
 
       - name: Run Docker Compose
         run: ssh -o StrictHostKeyChecking=no root@${{ secrets.SERVER_HOST }} 'cd /root/GymProject && docker-compose up -d'
+        env:
+          DOCKER_COMPOSE_PROJECT_NAME: gymproject
+        shell: bash
