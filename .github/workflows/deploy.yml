@@ -29,4 +29,5 @@ jobs:
         ssh root@45.9.191.191 'docker stop gymproject-container || true'
         ssh root@45.9.191.191 'docker rm gymproject-container || true'
         ssh root@45.9.191.191 'docker build -t gymproject /root/GymProject'
-        ssh root@45.9.191.191 'docker run --name gymproject-container -d gymproject || (docker logs gymproject-container && false)'
+        ssh root@45.9.191.191 'docker run -d --name gymcontainer -p 8080:8080 gymapplication || (docker logs gymproject-container && false)'
+        ssh root@45.9.191.191 'docker start gymcontainer'
