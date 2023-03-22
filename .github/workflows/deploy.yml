@@ -25,7 +25,7 @@ jobs:
     - name: Deploy to VPS
       run: |
         set -e
-        scp Dockerfile demo.jar root@45.9.191.191:/root/GymProject/out/demo_jar/
+        scp Dockerfile demo.jar root@45.9.191.191:/root/GymProject
         ssh root@45.9.191.191 'docker stop gymproject-container || true'
         ssh root@45.9.191.191 'docker rm gymproject-container || true'
         ssh root@45.9.191.191 'docker build -t gymproject /root/GymProject'
