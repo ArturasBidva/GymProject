@@ -11,22 +11,6 @@ public class Exercise {
     private String imgUrl;
     private String description;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
     public Exercise(ExerciseEntity exerciseEntity) {
         this.id = exerciseEntity.getId();
         this.title = exerciseEntity.getTitle();

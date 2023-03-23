@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.Entities.UserEntity;
+import com.example.demo.Models.Exercise;
 import com.example.demo.Models.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -18,17 +22,25 @@ public class UserService {
         userRepository.delete(userRepository.getReferenceById(id));
     }
 
-    public void updateUser(Long id, User user) {
-        UserEntity referenceById = userRepository.getReferenceById(id);
-        referenceById.setImgUrl(user.getImgUrl());
-        referenceById.setName(user.getName());
-        referenceById.setPassword(user.getPassword());
-        userRepository.save(referenceById);
+    public void createUser(User user) {
+      UserEntity userEntity = new UserEntity();
+      userEntity.setUsername(user.getUsername());
+      userEntity.setPassword(user.getPassword());
+        userRepository.save(userEntity);
+        System.out.println("Ggg");
     }
 
     public User getUserById(Long id) {
         UserEntity userEntity = userRepository.getReferenceById(id);
         System.out.println("gge");
         return new User(userEntity);
+    }
+
+    public List<User> getALlUsers() {
+
+        return userRepository.findAll()
+                .stream()
+                .map(User::new)
+                .collect(Collectors.toList());
     }
 }
