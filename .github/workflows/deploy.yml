@@ -26,6 +26,6 @@ jobs:
       run: |
         set -e
         scp Dockerfile demo.jar root@45.9.191.191:/root/GymProject
-        ssh root@45.9.191.191 'docker kill gymproject-container || true'
-        ssh root@45.9.191.191 'docker rm gymproject-container || true'
+        ssh root@45.9.191.191 'docker kill gymcontainer || true'
+        ssh root@45.9.191.191 'docker rm gymcontainer || true'
         ssh root@45.9.191.191 'docker run -d --name gymcontainer -p 8080:8080 gymapplication || (docker logs gymproject-container && false)'
