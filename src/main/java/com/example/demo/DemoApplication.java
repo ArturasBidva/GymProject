@@ -25,7 +25,7 @@ public class DemoApplication {
         Exercise exercise = new Exercise();
         exercise.setTitle("Belekas");
         exercise.setWeight(100);
-        exercise.setDescription("vaziuojam dzesika 200");
+        exercise.setDescription("vaziuojam dzesika 2000");
         exercise.setImgUrl("https://post.healthline.com/wp-content/uploads/2020/02/man-exercising-plank-push-up-1200x628-facebook.jpg");
         exerciseService.saveData(exercise);
     }
