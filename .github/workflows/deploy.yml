@@ -21,7 +21,6 @@ jobs:
     - name: Add VPS host key to known_hosts
       run: |
         ssh-keyscan -H 45.9.191.191 >> ~/.ssh/known_hosts
-
     - name: Deploy to VPS
       run: |
         set -e
