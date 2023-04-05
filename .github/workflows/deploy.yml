@@ -30,5 +30,5 @@ jobs:
         ssh root@45.9.191.191 'docker rm gymcontainer || true'
         ssh root@45.9.191.191 'docker build -t gymapplication /root/GymProject'
         ssh root@45.9.191.191 'docker images'
-        ssh root@45.9.191.191 'docker run -d --name gymcontainer -p 8080:8080 gymapplication'
+        ssh root@45.9.191.191 'docker run -d --name gymcontainer -p 8081:8081 gymapplication'
         ssh root@45.9.191.191 'docker ps -a'
