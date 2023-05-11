@@ -6,8 +6,20 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://your-mysql-server-ip:3306/gymapp?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/gymapp?allowPublicKeyRetrieval=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=watafaking
       - SPRING_DATASOURCE_PASSWORD=amogusas
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: amogusas
+      MYSQL_DATABASE: gymapp
+      MYSQL_USER: watafaking
+      MYSQL_PASSWORD: amogusas
+    ports:
+      - "3307:3306"

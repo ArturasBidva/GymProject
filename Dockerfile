@@ -1,4 +1,4 @@
-FROM adoptopenjdk:17.0.2_12-jre-hotspot
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
