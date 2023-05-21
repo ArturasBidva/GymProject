@@ -1,6 +1,5 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Models.Exercise;
 import com.example.demo.Models.User;
 import com.example.demo.service.UserService;
 import org.springframework.http.MediaType;

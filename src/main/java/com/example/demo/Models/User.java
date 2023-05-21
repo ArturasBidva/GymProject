@@ -11,7 +11,7 @@ public class User {
     String username;
     String password;
 
-    public User() {} // default constructor
+    public User() {}
 
     @JsonCreator
     public User(@JsonProperty("id") Long id,
