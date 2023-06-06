@@ -1,7 +1,6 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Models.AddExerciseToWorkout;
-import com.example.demo.Models.ExerciseWorkout;
 import com.example.demo.Models.Workout;
 import com.example.demo.service.ExerciseWorkoutService;
 import com.example.demo.service.WorkoutService;
@@ -29,23 +28,19 @@ public class WorkoutController {
         return newWorkout;
     }
 
-    @GetMapping(value = "/workouts", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/workouts")
     List<Workout> getAllWorkouts() {
         return workoutService.getALlWorkouts();
     }
 
-    @GetMapping(value = "/get/workout/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get/workout/{id}")
     Workout getWorkoutById(@PathVariable Long id) {
         return workoutService.getWorkoutById(id);
     }
 
     @PostMapping(value = "/add/workout", consumes = MediaType.APPLICATION_JSON_VALUE)
-    Workout addExerciseToWorkout(@RequestBody AddExerciseToWorkout addExerciseToWorkout) {
-        Workout workoutById = workoutService.getWorkoutById(addExerciseToWorkout.getWorkoutId());
-        ExerciseWorkout exerciseWorkout = exerciseWorkoutService.getExerciseWorkoutById(addExerciseToWorkout.getExerciseWorkoutId());
-        workoutById.setExerciseWorkouts(List.of(exerciseWorkout));
-        workoutService.addExerciseToWorkout(workoutById, addExerciseToWorkout.getExerciseWorkoutId());
-        return workoutById;
+    public Workout addExerciseToWorkout(@RequestBody AddExerciseToWorkout addExerciseToWorkout) {
+        return workoutService.addExerciseToWorkout(addExerciseToWorkout.getWorkoutId(), addExerciseToWorkout.getExerciseWorkoutId());
     }
 
 }

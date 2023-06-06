@@ -1,8 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Entities.ExerciseCategoryEntity;
 import com.example.demo.Models.Exercise;
-import com.example.demo.Models.ExerciseCategory;
 import com.example.demo.service.ExerciseCategoryService;
 import com.example.demo.service.ExerciseService;
 import org.springframework.http.MediaType;
@@ -22,13 +20,8 @@ public class ExerciseController {
     }
 
     @PostMapping(value = "/exercise", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Exercise testRequest(@RequestBody Exercise exercise) {
-        String title = exercise.getTitle();
-        int weight = exercise.getWeight();
-        exercise.setTitle(title);
-        exercise.setWeight(weight);
-        exerciseService.saveData(exercise);
-        return exercise;
+    public Exercise saveExercise(@RequestBody Exercise exercise) {
+        return exerciseService.saveData(exercise);
     }
 
     @GetMapping("/exercises")
@@ -60,17 +53,4 @@ public class ExerciseController {
         return exerciseService.getExerciseById(id);
     }
 
-    @PostMapping(value = "/exercise/setCategory", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Exercise createExerciseWithCategory(@RequestBody Exercise exercise,
-                                               @RequestParam(name = "categoryId") Long categoryId) {
-        ExerciseCategory category = exerciseCategoryService.getExerciseCategoryById(categoryId);
-        if (category != null) {
-            ExerciseCategoryEntity categoryEntity = new ExerciseCategoryEntity();
-            categoryEntity.setId(category.getId());
-            categoryEntity.setCategory(category.getCategory());
-            exercise.setCategory(List.of(category));
-            exerciseService.saveData(exercise);
-        }
-        return exercise;
-    }
 }

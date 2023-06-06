@@ -2,14 +2,13 @@ package com.example.demo.Controller;
 
 import com.example.demo.Models.Exercise;
 import com.example.demo.Models.ExerciseWorkout;
-import com.example.demo.Models.Workout;
 import com.example.demo.service.ExerciseService;
 import com.example.demo.service.ExerciseWorkoutService;
 import com.example.demo.service.WorkoutService;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ExerciseWorkoutController {
@@ -30,7 +29,17 @@ public class ExerciseWorkoutController {
         ExerciseWorkout exerciseWorkout1 = new ExerciseWorkout();
         exerciseWorkout1.setExercise(exerciseById);
         exerciseWorkout1.setGoal(goal);
-        exerciseWorkoutService.createWorkoutExercise(exerciseWorkout1);
-        return exerciseWorkout1;
+        System.out.println("Exercise Workout Saved");
+        return exerciseWorkoutService.createExerciseWorkout(exerciseWorkout1);
+    }
+
+    @GetMapping(value = "/get/exerciseworkout")
+    public List<ExerciseWorkout> getAllExerciseWorkouts(){
+        return exerciseWorkoutService.getAllExerciseWorkout();
+    }
+
+    @GetMapping(value = "/get/exerciseworkout/{id}")
+    public ExerciseWorkout getExerciseWorkoutById(@PathVariable Long id){
+        return exerciseWorkoutService.getExerciseWorkoutById(id);
     }
 }

@@ -1,31 +1,18 @@
-name: Run Jar on Docker
+Evaluate your monthly budget: Calculate your monthly income and expenses to determine how much money you can allocate towards loan payments. Ensure you have a clear understanding of your financial situation.
 
-on:
-  push:
-    branches:
-      - main
+Prioritize high-interest loans: Begin by focusing on loans with the highest interest rates, as they cost you the most money over time. In this case, prioritize the loans in the following order:
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+Credway (34% interest)
+Feratum (42% interest)
+Cashbuddy (32.41% interest)
+Northmill (13.40% interest)
+Swedbank (9,090% interest)
+Pay the minimum on all loans: Make the minimum required payments on all your loans except the one with the highest interest rate.
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+Allocate extra funds: With the remaining money from your monthly budget, allocate it towards the loan with the highest interest rate. Focus on paying off this loan as quickly as possible while making the minimum payments on the other loans.
 
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
+Snowball method: Once you pay off the loan with the highest interest rate, move on to the loan with the next highest interest rate. Take the amount you were paying towards the first loan and add it to the minimum payment of the next loan. This is called the snowball method, and it helps you accelerate your debt repayment.
 
-    - name: Add VPS host key to known_hosts
-      run: |
-        ssh-keyscan -H 45.9.191.191 >> ~/.ssh/known_hosts
+Repeat the process: Continue this process, paying off one loan at a time until you clear all your debts.
 
-    - name: Deploy to VPS
-      run: |
-        set -e
-        scp Dockerfile demo.jar root@45.9.191.191:/root/GymProject
-        ssh root@45.9.191.191 'docker kill gymproject-container || true'
-        ssh root@45.9.191.191 'docker rm gymproject-container || true'
-        ssh root@45.9.191.191 'docker run -d --name gymcontainer -p 8080:8080 gymapplication || (docker logs gymproject-container && false)'
+Evaluate opportunities for refinancing: As you make progress in paying off your loans, explore the possibility of refinancing certain loans with high interest rates. This may help you secure lower interest rates, resulting in potential savings.

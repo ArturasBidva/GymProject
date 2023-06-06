@@ -11,7 +11,7 @@ public class ExerciseWorkout {
     int goal;
     public ExerciseWorkout(ExerciseWorkoutEntity exerciseWorkoutEntity) {
         this.id = exerciseWorkoutEntity.getId();
-        this.exercise = new Exercise(exerciseWorkoutEntity.getExerciseEntity()); // Assuming you have an Exercise class with the required constructor.
+        this.exercise = new Exercise(exerciseWorkoutEntity.getExerciseEntity());
         this.completedCount = exerciseWorkoutEntity.getCompletedCount();
         this.goal = exerciseWorkoutEntity.getGoal();
     }

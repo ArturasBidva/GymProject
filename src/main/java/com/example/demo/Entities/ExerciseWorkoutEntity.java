@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import com.example.demo.Models.ExerciseWorkout;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ public class ExerciseWorkoutEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "workout_id")
     private WorkoutEntity workoutEntity;
 
@@ -23,4 +24,15 @@ public class ExerciseWorkoutEntity {
     int completedCount = 0;
     int goal;
 
+    public ExerciseWorkoutEntity(ExerciseWorkout exerciseWorkout) {
+        this.id = exerciseWorkout.getId();
+        this.completedCount = exerciseWorkout.getCompletedCount();
+        this.goal = exerciseWorkout.getGoal();
+        this.exerciseEntity = new ExerciseEntity(exerciseWorkout.getExercise());
+    }
+
+    public ExerciseWorkoutEntity() {
+
+    }
 }
+

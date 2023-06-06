@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "gym_exercisesCategory")
+@Table(name = "gym_exercise_category")
 public class ExerciseCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

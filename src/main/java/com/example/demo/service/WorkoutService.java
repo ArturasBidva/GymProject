@@ -10,7 +10,6 @@ import com.example.demo.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,17 +22,28 @@ public class WorkoutService {
 
     ExerciseWorkoutRepository exerciseWorkoutRepository;
 
+    ExerciseWorkoutService exerciseWorkoutService;
+
     WorkoutService(WorkoutRepository workoutRepository,
                    ExerciseRepository exerciseRepository,
                    ExerciseCategoryRepository exerciseCategoryRepository,
-                   ExerciseWorkoutRepository exerciseWorkoutRepository) {
+                   ExerciseWorkoutRepository exerciseWorkoutRepository, ExerciseWorkoutService exerciseWorkoutService) {
         this.workoutRepository = workoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.exerciseCategoryRepository = exerciseCategoryRepository;
         this.exerciseWorkoutRepository = exerciseWorkoutRepository;
+        this.exerciseWorkoutService = exerciseWorkoutService;
     }
 
     @Transactional
+    public Workout addExerciseToWorkout(Long workoutId, Long exerciseId) {
+        WorkoutEntity referenceById = workoutRepository.getReferenceById(workoutId);
+        ExerciseWorkoutEntity exerciseWorkoutById = exerciseWorkoutService.getExerciseWorkoutByIdEntity(exerciseId);
+        referenceById.getExerciseWorkoutEntities().add(exerciseWorkoutById);
+        return new Workout(referenceById);
+    }
+
+
     public void createWorkoutData(Workout workout) {
         WorkoutEntity workoutEntity = new WorkoutEntity();
         workoutEntity.setDescription(workout.getDescription());
@@ -41,19 +51,21 @@ public class WorkoutService {
         workoutRepository.save(workoutEntity);
     }
 
-    public void addExerciseToWorkout(Workout workout, Long exerciseWorkoutId) {
-        WorkoutEntity referenceById = workoutRepository.getReferenceById(workout.getId());
-        ExerciseWorkoutEntity exerciseWorkoutEntity = exerciseWorkoutRepository.getReferenceById(exerciseWorkoutId);
-        List<ExerciseWorkoutEntity> exerciseWorkoutEntities = new ArrayList<>(referenceById.getExerciseWorkoutEntities());
-        exerciseWorkoutEntities.add(exerciseWorkoutEntity);
-        referenceById.setExerciseWorkoutEntities(exerciseWorkoutEntities);
-        workoutRepository.save(referenceById);
+    public Workout updateWorkout(Workout updatedWorkout) {
+        WorkoutEntity referenceById = workoutRepository.getReferenceById(updatedWorkout.getId());
+        referenceById.setDescription(updatedWorkout.getDescription());
+        referenceById.setTitle(updatedWorkout.getTitle());
+        WorkoutEntity workoutEntity = new WorkoutEntity(updatedWorkout);
+        referenceById.setExerciseWorkoutEntities(workoutEntity.getExerciseWorkoutEntities());
+        WorkoutEntity savedWorkoutEntity = workoutRepository.save(referenceById);
+        return new Workout(savedWorkoutEntity);
     }
 
     public Workout getWorkoutById(Long id) {
         WorkoutEntity workoutEntity = workoutRepository.getReferenceById(id);
         return new Workout(workoutEntity);
     }
+
 
     public List<Workout> getALlWorkouts() {
 

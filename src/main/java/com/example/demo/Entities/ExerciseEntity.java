@@ -1,11 +1,13 @@
 package com.example.demo.Entities;
 
+import com.example.demo.Models.Exercise;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -27,11 +29,22 @@ public class ExerciseEntity {
             joinColumns = @JoinColumn(name = "exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<ExerciseCategoryEntity> exerciseCategory;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "workout_exercise",
-            joinColumns = @JoinColumn(name = "exercise_id"),
-            inverseJoinColumns = @JoinColumn(name = "workout_id"))
-    private List<WorkoutEntity> workoutEntities;
 
+    public ExerciseEntity(Exercise exercise) {
+        this.id = exercise.getId();
+        this.title = exercise.getTitle();
+        this.weight = exercise.getWeight();
+        this.imgUrl = exercise.getImgUrl();
+        this.description = exercise.getDescription();
+        this.exerciseCategory = exercise.getCategory().stream()
+                .map(category -> {
+                    ExerciseCategoryEntity categoryEntity = new ExerciseCategoryEntity();
+                    categoryEntity.setId(category.getId());
+                    categoryEntity.setCategory(category.getCategory());
+                    return categoryEntity;
+                }).collect(Collectors.toList());
+    }
+    public ExerciseEntity(){
+
+    }
 }
