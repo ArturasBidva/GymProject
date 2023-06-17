@@ -9,13 +9,18 @@ public class ExerciseWorkout {
     private Exercise exercise;
     int completedCount = 0;
     int goal;
+
+    int weight = 0;
+
     public ExerciseWorkout(ExerciseWorkoutEntity exerciseWorkoutEntity) {
         this.id = exerciseWorkoutEntity.getId();
         this.exercise = new Exercise(exerciseWorkoutEntity.getExerciseEntity());
         this.completedCount = exerciseWorkoutEntity.getCompletedCount();
         this.goal = exerciseWorkoutEntity.getGoal();
+        this.weight =exerciseWorkoutEntity.getWeight();
     }
-    public ExerciseWorkout(){
+
+    public ExerciseWorkout() {
 
     }
 }

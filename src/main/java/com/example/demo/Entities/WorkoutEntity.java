@@ -32,7 +32,6 @@ public class WorkoutEntity {
         this.id = workout.getId();
         this.title = workout.getTitle();
         this.description = workout.getDescription();
-
         this.exerciseWorkoutEntities = workout.getExerciseWorkouts().stream()
                 .map(ExerciseWorkoutEntity::new)
                 .collect(Collectors.toList());
