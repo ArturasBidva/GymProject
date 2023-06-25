@@ -61,6 +61,7 @@ public class WorkoutService {
         return new Workout(savedWorkoutEntity);
     }
 
+
     public Workout getWorkoutById(Long id) {
         WorkoutEntity workoutEntity = workoutRepository.getReferenceById(id);
         return new Workout(workoutEntity);

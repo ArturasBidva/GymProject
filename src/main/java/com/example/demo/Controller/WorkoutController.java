@@ -38,6 +38,7 @@ public class WorkoutController {
         return workoutService.getWorkoutById(id);
     }
 
+
     @PostMapping(value = "/add/workout", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Workout addExerciseToWorkout(@RequestBody AddExerciseToWorkout addExerciseToWorkout) {
         return workoutService.addExerciseToWorkout(addExerciseToWorkout.getWorkoutId(), addExerciseToWorkout.getExerciseWorkoutId());
