@@ -2,6 +2,6 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY demo.jar .
+COPY GymProject.jar .
 
-CMD ["java", "-jar", "demo.jar"]
+CMD ["java", "-jar", "GymProject.jar"]

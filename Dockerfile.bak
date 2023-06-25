@@ -1,7 +1,7 @@
-FROM openjdk:11-jre-slim
+FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY GymProject.jar /app/GymProject.jar
+COPY demo.jar .
 
-CMD ["java", "-jar", "GymProject.jar"]
+CMD ["java", "-jar", "demo.jar"]
