@@ -77,7 +77,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <outputDirectory>/path/to/output/directory</outputDirectory>
+                    <outputDirectory>${project.basedir}</outputDirectory>
                     <finalName>my-app</finalName>
                 </configuration>
             </plugin>
