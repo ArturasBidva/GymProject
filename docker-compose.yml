@@ -7,8 +7,8 @@ services:
       - "8080:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/gymapp?allowPublicKeyRetrieval=true&useSSL=false
-      - SPRING_DATASOURCE_USERNAME=watafaking
-      - SPRING_DATASOURCE_PASSWORD=amogusas
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=bomzas123
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_HIBERNATE_DDL-AUTO=create-drop
     depends_on:
@@ -17,9 +17,9 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: amogusas
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: gymapp
-      MYSQL_USER: watafaking
-      MYSQL_PASSWORD: amogusas
+      MYSQL_USER: root
+      MYSQL_PASSWORD: bomzas123
     ports:
       - "3307:3306"
