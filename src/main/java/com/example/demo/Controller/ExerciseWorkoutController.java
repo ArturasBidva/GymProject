@@ -25,12 +25,19 @@ public class ExerciseWorkoutController {
     @PostMapping(value = "/exerciseworkout", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ExerciseWorkout createExerciseWorkout(@RequestBody ExerciseWorkout exerciseWorkout) {
         Exercise exerciseById = exerciseService.getExerciseById(exerciseWorkout.getExercise().getId());
-        int goal = exerciseWorkout.getGoal();
         ExerciseWorkout exerciseWorkout1 = new ExerciseWorkout();
         exerciseWorkout1.setExercise(exerciseById);
-        exerciseWorkout1.setGoal(goal);
+        exerciseWorkout1.setGoal(exerciseWorkout.getGoal());
         System.out.println("Exercise Workout Saved");
         return exerciseWorkoutService.createExerciseWorkout(exerciseWorkout1);
+    }
+
+    @PostMapping(value = "/exerciseworkout/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ExerciseWorkout editExerciseWorkout(@PathVariable Long id,@RequestBody ExerciseWorkout exerciseWorkout) {
+       ExerciseWorkout exerciseWorkoutById = exerciseWorkoutService.getExerciseWorkoutById(id);
+       exerciseWorkoutById.setWeight(exerciseWorkout.getWeight());
+       exerciseWorkoutById.setGoal(exerciseWorkout.getGoal());
+        return exerciseWorkoutService.updateExerciseWorkout(exerciseWorkoutById);
     }
 
     @GetMapping(value = "/get/exerciseworkout")

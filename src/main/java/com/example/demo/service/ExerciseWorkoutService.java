@@ -5,6 +5,7 @@ import com.example.demo.Entities.ExerciseWorkoutEntity;
 import com.example.demo.Models.Exercise;
 import com.example.demo.Models.ExerciseWorkout;
 import com.example.demo.repository.ExerciseCategoryRepository;
+import com.example.demo.repository.ExerciseRepository;
 import com.example.demo.repository.ExerciseWorkoutRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,30 +16,23 @@ import java.util.stream.Collectors;
 public class ExerciseWorkoutService {
     ExerciseWorkoutRepository exerciseWorkoutRepository;
     ExerciseCategoryRepository exerciseCategoryRepository;
+    ExerciseRepository exerciseRepository;
 
     ExerciseWorkoutService(ExerciseWorkoutRepository exerciseWorkoutRepository,
-                           ExerciseCategoryRepository exerciseCategoryRepository
+                           ExerciseCategoryRepository exerciseCategoryRepository,
+                           ExerciseRepository exerciseRepository
     ) {
         this.exerciseWorkoutRepository = exerciseWorkoutRepository;
         this.exerciseCategoryRepository = exerciseCategoryRepository;
+        this.exerciseRepository = exerciseRepository;
     }
 
     public ExerciseWorkout createExerciseWorkout(ExerciseWorkout exerciseWorkout) {
         ExerciseWorkoutEntity exerciseWorkoutEntity = new ExerciseWorkoutEntity();
         exerciseWorkoutEntity.setGoal(exerciseWorkout.getGoal());
-        ExerciseEntity exerciseEntity = new ExerciseEntity();
-        exerciseEntity.setId(exerciseWorkout.getExercise().getId());
-        exerciseWorkoutEntity.setExerciseEntity(exerciseEntity);
-        ExerciseWorkoutEntity savedEntity = exerciseWorkoutRepository.save(exerciseWorkoutEntity);
-
-        ExerciseWorkout savedExerciseWorkout = new ExerciseWorkout();
-        savedExerciseWorkout.setId(savedEntity.getId());
-        savedExerciseWorkout.setGoal(savedEntity.getGoal());
-        Exercise exercise = new Exercise();
-        exercise.setId(savedEntity.getExerciseEntity().getId());
-        savedExerciseWorkout.setExercise(exercise);
-
-        return savedExerciseWorkout;
+        ExerciseEntity exerciseEntityById = exerciseRepository.getReferenceById(exerciseWorkout.getExercise().getId());
+        exerciseWorkoutEntity.setExerciseEntity(exerciseEntityById);
+        return new ExerciseWorkout(exerciseWorkoutRepository.save(exerciseWorkoutEntity));
     }
 
     public void deleteExerciseWorkout(ExerciseWorkout exerciseWorkout) {
@@ -49,6 +43,14 @@ public class ExerciseWorkoutService {
     public ExerciseWorkout getExerciseWorkoutById(Long id) {
         ExerciseWorkoutEntity exerciseWorkoutEntity = exerciseWorkoutRepository.getReferenceById(id);
         return new ExerciseWorkout(exerciseWorkoutEntity);
+    }
+
+    public ExerciseWorkout updateExerciseWorkout(ExerciseWorkout exerciseWorkout) {
+        ExerciseWorkoutEntity exerciseWorkoutEntity = exerciseWorkoutRepository.getReferenceById(exerciseWorkout.getId());
+        exerciseWorkoutEntity.setGoal(exerciseWorkout.getGoal());
+        exerciseWorkoutEntity.setWeight(exerciseWorkout.getWeight());
+        ExerciseWorkoutEntity updatedExerciseWorkout = exerciseWorkoutRepository.save(exerciseWorkoutEntity);
+        return new ExerciseWorkout(updatedExerciseWorkout);
     }
 
     public ExerciseWorkoutEntity getExerciseWorkoutByIdEntity(Long id) {
