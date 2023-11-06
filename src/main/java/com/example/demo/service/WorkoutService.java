@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.Entities.ExerciseWorkoutEntity;
 import com.example.demo.Entities.WorkoutEntity;
+import com.example.demo.Models.Exercise;
+import com.example.demo.Models.ExerciseWorkout;
 import com.example.demo.Models.Workout;
 import com.example.demo.repository.ExerciseCategoryRepository;
 import com.example.demo.repository.ExerciseRepository;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +37,12 @@ public class WorkoutService {
         this.exerciseWorkoutService = exerciseWorkoutService;
     }
 
-    @Transactional
-    public Workout addExerciseToWorkout(Long workoutId, Long exerciseId) {
-        WorkoutEntity referenceById = workoutRepository.getReferenceById(workoutId);
-        ExerciseWorkoutEntity exerciseWorkoutById = exerciseWorkoutService.getExerciseWorkoutByIdEntity(exerciseId);
-        referenceById.getExerciseWorkoutEntities().add(exerciseWorkoutById);
-        return new Workout(referenceById);
-    }
 
+    public void addExerciseWorkoutToWorkout(Long workoutId, ExerciseWorkout exerciseWorkout) {
+        Workout workout = getWorkoutById(workoutId);
+        workout.addToExerciseWorkouts(exerciseWorkout);
+        updateWorkout(workout);
+    }
 
     public void createWorkoutData(Workout workout) {
         WorkoutEntity workoutEntity = new WorkoutEntity();
@@ -51,20 +51,48 @@ public class WorkoutService {
         workoutRepository.save(workoutEntity);
     }
 
-    public Workout updateWorkout(Workout updatedWorkout) {
+    @Transactional
+    public void updateWorkout(Workout updatedWorkout) {
         WorkoutEntity referenceById = workoutRepository.getReferenceById(updatedWorkout.getId());
         referenceById.setDescription(updatedWorkout.getDescription());
         referenceById.setTitle(updatedWorkout.getTitle());
         WorkoutEntity workoutEntity = new WorkoutEntity(updatedWorkout);
+        Set<Long> referenceExerciseIds = referenceById.getExerciseWorkoutEntities().stream()
+                .map(exerciseWorkoutEntity -> exerciseWorkoutEntity.getExerciseEntity().getId())
+                .collect(Collectors.toSet());
+
+        Set<Long> updatedExerciseIds = workoutEntity.getExerciseWorkoutEntities().stream()
+                .map(exerciseWorkout -> exerciseWorkout.getExerciseEntity().getId())
+                .collect(Collectors.toSet());
+
+        if(referenceExerciseIds.equals(updatedExerciseIds)){
+            System.out.println("gotcha");
+            return;
+        }
         referenceById.setExerciseWorkoutEntities(workoutEntity.getExerciseWorkoutEntities());
-        WorkoutEntity savedWorkoutEntity = workoutRepository.save(referenceById);
-        return new Workout(savedWorkoutEntity);
+        workoutRepository.save(referenceById);
     }
 
+    public void deleteWorkoutById(Long workoutId) {
+        WorkoutEntity referenceById = workoutRepository.getReferenceById(workoutId);
+        workoutRepository.delete(referenceById);
+    }
+
+    public void addWorkoutToSchedule(Workout workout){
+        WorkoutEntity referencedById = workoutRepository.getReferenceById(workout.getId());
+        referencedById.setDate(workout.getDate());
+        referencedById.setStartTime(workout.getStartTime());
+        referencedById.setEndTime(workout.getEndTime());
+        workoutRepository.save(referencedById);
+    }
 
     public Workout getWorkoutById(Long id) {
         WorkoutEntity workoutEntity = workoutRepository.getReferenceById(id);
         return new Workout(workoutEntity);
+    }
+
+    public void deleteAllWorkouts() {
+        workoutRepository.deleteAll();
     }
 
 

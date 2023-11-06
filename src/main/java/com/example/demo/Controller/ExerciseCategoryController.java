@@ -17,9 +17,9 @@ public class ExerciseCategoryController {
 
     @PostMapping(value = "/category", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ExerciseCategory createCategory(@RequestBody ExerciseCategory exerciseCategory) {
-        String category = exerciseCategory.getCategory();
-        exerciseCategory.setCategory(category);
-        exerciseCategoryService.saveCategory(exerciseCategory);
+        String category = exerciseCategory.getName();
+        exerciseCategory.setName(category);
+        exerciseCategoryService.saveCategory();
         return exerciseCategory;
     }
 

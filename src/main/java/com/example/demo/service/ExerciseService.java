@@ -10,6 +10,7 @@ import com.example.demo.repository.ExerciseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,42 +36,42 @@ public class ExerciseService {
         exerciseEntity.setWeight(exercise.getWeight());
         exerciseEntity.setImgUrl(exercise.getImgUrl());
         exerciseEntity.setDescription(exercise.getDescription());
-        List<ExerciseCategoryEntity> categoryEntities = exercise.getCategory().stream()
-                .map(category -> {
-                    ExerciseCategoryEntity categoryEntity = new ExerciseCategoryEntity();
-                    categoryEntity.setId(category.getId());
-                    categoryEntity.setCategory(category.getCategory());
-                    return exerciseCategoryRepository.save(categoryEntity);
-                }).toList();
 
-        exerciseEntity.setExerciseCategory(categoryEntities);
         System.out.println("Exercise Saved");
+        ExerciseCategoryEntity referenceById = exerciseCategoryRepository.getReferenceById(1L);
+        ExerciseCategoryEntity referenceByIdtwo = exerciseCategoryRepository.getReferenceById(2L);
+        List<ExerciseCategoryEntity> categoryList = new ArrayList<>();
+        categoryList.add(referenceById);
+        categoryList.add(referenceByIdtwo);
+        exerciseEntity.setExerciseCategory(categoryList);
         ExerciseEntity save = exerciseRepository.save(exerciseEntity);
         Exercise exercise1 = new Exercise();
         exercise1.setTitle(save.getTitle());
         exercise1.setImgUrl(save.getImgUrl());
         exercise1.setDescription(save.getDescription());
-        exercise1.setCategory(exercise.getCategory());
         exercise1.setId(save.getId());
+
         return exercise1;
     }
 
     @Transactional
     public void deleteExercise(Long exerciseId) {
-        List<Workout> aLlWorkouts = workoutService.getALlWorkouts();
-        List<Workout> updatedWorkouts = aLlWorkouts.stream().peek(workout ->
-                workout.getExerciseWorkouts().removeIf(exerciseWorkout -> exerciseWorkout.getExercise().getId().equals(exerciseId))).toList();
-        updatedWorkouts.forEach(workoutService::updateWorkout);
+        List<Workout> allWorkouts = workoutService.getALlWorkouts();
 
-        List<ExerciseWorkout> allExercisesWorkouts = exerciseWorkoutService.getAllExerciseWorkout();
-        for (ExerciseWorkout exerciseWorkout : allExercisesWorkouts) {
-            if (exerciseWorkout.getExercise().getId().equals(exerciseId)) {
-                exerciseWorkoutService.deleteExerciseWorkout(exerciseWorkout);
-            }
+        for (Workout workout : allWorkouts) {
+            workout.getExerciseWorkouts().removeIf(exerciseWorkout ->
+                    exerciseWorkout.getExercise().getId().equals(exerciseId));
+            workoutService.updateWorkout(workout);
         }
-        ExerciseEntity exerciseEntity = exerciseRepository.getReferenceById(exerciseId);
-        exerciseRepository.delete(exerciseEntity);
 
+        List<ExerciseWorkout> exerciseWorkoutsToDelete = exerciseWorkoutService.getExerciseWorkoutsByExerciseId(exerciseId);
+
+        for (ExerciseWorkout exerciseWorkout : exerciseWorkoutsToDelete) {
+            exerciseWorkoutService.deleteExerciseWorkout(exerciseWorkout);
+        }
+
+        ExerciseEntity referenceById = exerciseRepository.getReferenceById(exerciseId);
+        exerciseRepository.delete(referenceById);
     }
 
 
@@ -96,5 +97,4 @@ public class ExerciseService {
         System.out.println("Getting exercise by ID");
         return new Exercise(exerciseEntity);
     }
-
 }

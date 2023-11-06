@@ -6,14 +6,13 @@ import lombok.Data;
 @Data
 public class ExerciseCategory {
     Long id;
-    String category;
+    String name;
 
 
     public ExerciseCategory(ExerciseCategoryEntity exerciseCategoryEntity){
         this.id = exerciseCategoryEntity.getId();
-        this.category = exerciseCategoryEntity.getCategory();
+        this.name = exerciseCategoryEntity.getCategory();
     }
-
     public ExerciseCategory() {
 
     }

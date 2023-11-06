@@ -2,7 +2,6 @@ package com.example.demo.Entities;
 
 import com.example.demo.Models.Exercise;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +39,7 @@ public class ExerciseEntity {
                 .map(category -> {
                     ExerciseCategoryEntity categoryEntity = new ExerciseCategoryEntity();
                     categoryEntity.setId(category.getId());
-                    categoryEntity.setCategory(category.getCategory());
+                    categoryEntity.setCategory(category.getName());
                     return categoryEntity;
                 }).collect(Collectors.toList());
     }
