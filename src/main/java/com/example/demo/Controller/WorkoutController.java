@@ -1,16 +1,12 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Models.AddExerciseToWorkout;
 import com.example.demo.Models.Workout;
 import com.example.demo.Models.WorkoutExerciseWorkoutRequest;
 import com.example.demo.service.ExerciseWorkoutService;
 import com.example.demo.service.WorkoutService;
-import lombok.val;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -61,9 +57,5 @@ public class WorkoutController {
         workoutService.deleteWorkoutById(id);
     }
 
-//    @PostMapping(value = "/add/workout/addworkouttoschedule",consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public void addWorkoutToSchedule(@RequestBody Workout workout){
-//        workoutService.addWorkoutToSchedule(workout);
-//    }
 
 }
